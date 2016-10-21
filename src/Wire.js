@@ -1,4 +1,5 @@
 import { Duplex } from 'stream';
+import fs from 'fs';
 import crypto from 'crypto';
 import BitField from 'bitfield';
 import bencode from 'bencode';
@@ -206,6 +207,11 @@ export default class Wire extends Duplex {
       return;
     }
     const infohash = crypto.createHash('sha1').update(metadata).digest('hex');
+    fs.writeFile(`/tmp/${metadata.infohash}.torrent`, _metadata, (err) => {
+      if (err) {
+        console.log(err);
+      }
+    });
     if (this._infohash.toString('hex') !== infohash) {
       this._fail();
       return false;

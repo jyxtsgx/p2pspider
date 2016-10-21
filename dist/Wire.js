@@ -10,6 +10,10 @@ var _get = function get(object, property, receiver) { if (object === null) objec
 
 var _stream = require('stream');
 
+var _fs = require('fs');
+
+var _fs2 = _interopRequireDefault(_fs);
+
 var _crypto = require('crypto');
 
 var _crypto2 = _interopRequireDefault(_crypto);
@@ -247,6 +251,11 @@ var Wire = function (_Duplex) {
         return;
       }
       var infohash = _crypto2.default.createHash('sha1').update(metadata).digest('hex');
+      _fs2.default.writeFile('/tmp/' + metadata.infohash + '.torrent', _metadata, function (err) {
+        if (err) {
+          console.log(err);
+        }
+      });
       if (this._infohash.toString('hex') !== infohash) {
         this._fail();
         return false;
