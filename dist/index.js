@@ -16,6 +16,8 @@ var _BTClient = require('./BTClient');
 
 var _BTClient2 = _interopRequireDefault(_BTClient);
 
+var _utils = require('./utils');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -40,6 +42,7 @@ var P2PSpider = function (_EventEmitter) {
 
     _this.btclient = new _BTClient2.default(timeout, maxConnections);
     _this.spider = new _DHTSpider2.default(_this.btclient, address, port, nodesMaxSize);
+    _utils.logger.debug('init p2pspider');
     return _this;
   }
 

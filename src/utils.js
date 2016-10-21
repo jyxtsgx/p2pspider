@@ -1,7 +1,12 @@
-const crypto = require('crypto');
+import crypto from 'crypto';
+import bunyan from 'bunyan';
+
+const logger = bunyan.createLogger({ name: 'p2pspider', level: 'debug' });
 
 function randomID() {
-  return crypto.createHash('sha1').update(crypto.randomBytes(20)).digest();
+  const id = crypto.createHash('sha1').update(crypto.randomBytes(20)).digest();
+  logger.debug('random id', { id });
+  return id;
 }
 
 function decodeNodes(data) {
@@ -20,4 +25,4 @@ function genNeighborID(target, nid) {
   return Buffer.concat([target.slice(0, 10), nid.slice(10)]);
 }
 
-export { randomID, decodeNodes, genNeighborID };
+export { randomID, decodeNodes, genNeighborID, logger };

@@ -14,15 +14,11 @@ var _bencode = require('bencode');
 
 var _bencode2 = _interopRequireDefault(_bencode);
 
-var _utils = require('./utils');
-
-var utils = _interopRequireWildcard(_utils);
-
 var _KTable = require('./KTable');
 
 var _KTable2 = _interopRequireDefault(_KTable);
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+var _utils = require('./utils');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -43,6 +39,7 @@ var DHTSpider = function () {
     this.port = port;
     this.udp = _dgram2.default.createSocket('udp4');
     this.ktable = new _KTable2.default(nodesMaxSize || NODES_MAX_SIZE);
+    _utils.logger.debug('init DHTSpider');
   }
 
   _createClass(DHTSpider, [{
@@ -60,7 +57,8 @@ var DHTSpider = function () {
     value: function onFindNodeResponse(_nodes) {
       var _this = this;
 
-      var nodes = utils.decodeNodes(_nodes);
+      _utils.logger.debug('find node response');
+      var nodes = (0, _utils.decodeNodes)(_nodes);
       nodes.forEach(function (node) {
         if (node.address !== _this.address && node.nid !== _this.ktable.nid && node.port < 65536 && node.port > 0) {
           _this.ktable.push(node);
@@ -70,14 +68,14 @@ var DHTSpider = function () {
   }, {
     key: 'sendFindNodeRequest',
     value: function sendFindNodeRequest(rinfo, nid) {
-      var _nid = nid !== undefined ? utils.genNeighborID(nid, this.ktable.nid) : this.ktable.nid;
+      var _nid = nid !== undefined ? (0, _utils.genNeighborID)(nid, this.ktable.nid) : this.ktable.nid;
       var msg = {
-        t: utils.randomID().slice(0, TID_LENGTH),
+        t: (0, _utils.randomID)().slice(0, TID_LENGTH),
         y: 'q',
         q: 'find_node',
         a: {
           id: _nid,
-          target: utils.randomID()
+          target: (0, _utils.randomID)()
         }
       };
       this.sendKRPC(msg, rinfo);
@@ -119,19 +117,20 @@ var DHTSpider = function () {
           t: tid,
           y: 'r',
           r: {
-            id: utils.genNeighborID(infohash, this.ktable.nid),
+            id: (0, _utils.genNeighborID)(infohash, this.ktable.nid),
             nodes: '',
             token: token
           }
         }, rinfo);
       } catch (err) {
-        console.log(err);
+        _utils.logger.error(err);
       }
     }
   }, {
     key: 'onAnnouncePeerRequest',
     value: function onAnnouncePeerRequest(msg, rinfo) {
       try {
+        _utils.logger.debug('announce peer request', msg, rinfo);
         var infohash = msg.a.info_hash;
         var token = msg.a.token;
         var nid = msg.a.id;
@@ -160,13 +159,13 @@ var DHTSpider = function () {
           t: tid,
           y: 'r',
           r: {
-            id: utils.genNeighborID(nid, this.ktable.nid)
+            id: (0, _utils.genNeighborID)(nid, this.ktable.nid)
           }
         }, rinfo);
 
         this.btclient.add({ address: rinfo.address, port: port }, infohash);
       } catch (err) {
-        console.log(err);
+        _utils.logger.error(err);
       }
     }
   }, {

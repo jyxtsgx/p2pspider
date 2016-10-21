@@ -17,6 +17,7 @@ var KTable = function () {
     this.maxsize = maxsize;
     this.nid = (0, _utils.randomID)();
     this.nodes = [];
+    _utils.logger.debug('init KTable');
   }
 
   _createClass(KTable, [{

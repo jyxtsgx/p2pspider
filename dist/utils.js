@@ -3,10 +3,24 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var crypto = require('crypto');
+exports.logger = exports.genNeighborID = exports.decodeNodes = exports.randomID = undefined;
+
+var _crypto = require('crypto');
+
+var _crypto2 = _interopRequireDefault(_crypto);
+
+var _bunyan = require('bunyan');
+
+var _bunyan2 = _interopRequireDefault(_bunyan);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var logger = _bunyan2.default.createLogger({ name: 'p2pspider', level: 'debug' });
 
 function randomID() {
-  return crypto.createHash('sha1').update(crypto.randomBytes(20)).digest();
+  var id = _crypto2.default.createHash('sha1').update(_crypto2.default.randomBytes(20)).digest();
+  logger.debug('random id', { id: id });
+  return id;
 }
 
 function decodeNodes(data) {
@@ -28,3 +42,4 @@ function genNeighborID(target, nid) {
 exports.randomID = randomID;
 exports.decodeNodes = decodeNodes;
 exports.genNeighborID = genNeighborID;
+exports.logger = logger;

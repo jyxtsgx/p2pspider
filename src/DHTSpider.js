@@ -1,7 +1,7 @@
 import dgram from 'dgram';
 import bencode from 'bencode';
-import * as utils from './utils';
 import KTable from './KTable';
+import { randomID, decodeNodes, genNeighborID, logger } from './utils';
 
 const BOOTSTRAP_NODES = [
   ['router.bittorrent.com', 6881],
@@ -17,6 +17,7 @@ export default class DHTSpider {
     this.port = port;
     this.udp = dgram.createSocket('udp4');
     this.ktable = new KTable(nodesMaxSize || NODES_MAX_SIZE);
+    logger.debug('init DHTSpider');
   }
 
   sendKRPC(msg, rinfo) {
@@ -29,7 +30,8 @@ export default class DHTSpider {
   }
 
   onFindNodeResponse(_nodes) {
-    const nodes = utils.decodeNodes(_nodes);
+    logger.debug('find node response');
+    const nodes = decodeNodes(_nodes);
     nodes.forEach((node) => {
       if (node.address !== this.address && node.nid !== this.ktable.nid
         && node.port < 65536 && node.port > 0) {
@@ -39,14 +41,14 @@ export default class DHTSpider {
   }
 
   sendFindNodeRequest(rinfo, nid) {
-    const _nid = nid !== undefined ? utils.genNeighborID(nid, this.ktable.nid) : this.ktable.nid;
+    const _nid = nid !== undefined ? genNeighborID(nid, this.ktable.nid) : this.ktable.nid;
     const msg = {
-      t: utils.randomID().slice(0, TID_LENGTH),
+      t: randomID().slice(0, TID_LENGTH),
       y: 'q',
       q: 'find_node',
       a: {
         id: _nid,
-        target: utils.randomID()
+        target: randomID()
       }
     };
     this.sendKRPC(msg, rinfo);
@@ -81,19 +83,19 @@ export default class DHTSpider {
         t: tid,
         y: 'r',
         r: {
-          id: utils.genNeighborID(infohash, this.ktable.nid),
+          id: genNeighborID(infohash, this.ktable.nid),
           nodes: '',
           token
         }
       }, rinfo);
     } catch (err) {
-      console.log(err);
+      logger.error(err);
     }
   }
 
-
   onAnnouncePeerRequest(msg, rinfo) {
     try {
+      logger.debug('announce peer request', msg, rinfo);
       const infohash = msg.a.info_hash;
       const token = msg.a.token;
       const nid = msg.a.id;
@@ -122,13 +124,13 @@ export default class DHTSpider {
         t: tid,
         y: 'r',
         r: {
-          id: utils.genNeighborID(nid, this.ktable.nid)
+          id: genNeighborID(nid, this.ktable.nid)
         }
       }, rinfo);
 
       this.btclient.add({ address: rinfo.address, port }, infohash);
     } catch (err) {
-      console.log(err);
+      logger.error(err);
     }
   }
 

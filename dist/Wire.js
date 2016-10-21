@@ -63,6 +63,8 @@ var Wire = function (_Duplex) {
     _this._ut_metadata = null;
 
     _this._onHandshake();
+
+    _utils.logger.debug('init Wire');
     return _this;
   }
 

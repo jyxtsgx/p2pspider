@@ -1,10 +1,11 @@
-import { randomID } from './utils.js';
+import { randomID, logger } from './utils.js';
 
 export default class KTable {
   constructor(maxsize) {
     this.maxsize = maxsize;
     this.nid = randomID();
     this.nodes = [];
+    logger.debug('init KTable');
   }
 
   push(node) {

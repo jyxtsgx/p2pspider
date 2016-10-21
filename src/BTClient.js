@@ -2,6 +2,7 @@ import { EventEmitter } from 'events';
 import net from 'net';
 import PeerQueue from './PeerQueue';
 import Wire from './Wire';
+import { logger } from './utils';
 
 export default class BTClient extends EventEmitter {
   constructor(timeout, maxConnections) {
@@ -11,6 +12,7 @@ export default class BTClient extends EventEmitter {
     this.activeConnections = 0;
     this.peers = new PeerQueue(this.maxConnections);
     this.on('download', this._download);
+    logger.debug('init BTClient');
   }
 
   ignore(infohash, rinfo, callback) {

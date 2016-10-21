@@ -1,9 +1,12 @@
+import { logger } from './utils';
+
 export default class PeerQueue {
   constructor(maxSize, perLimit) {
     this.maxSize = maxSize || 200;
     this.perLimit = perLimit || 10;
     this.peers = {};
     this.reqs = [];
+    logger.debug('init PeerQueue');
   }
 
   _shift() {

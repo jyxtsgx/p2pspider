@@ -20,6 +20,8 @@ var _Wire = require('./Wire');
 
 var _Wire2 = _interopRequireDefault(_Wire);
 
+var _utils = require('./utils');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -41,6 +43,7 @@ var BTClient = function (_EventEmitter) {
     _this.activeConnections = 0;
     _this.peers = new _PeerQueue2.default(_this.maxConnections);
     _this.on('download', _this._download);
+    _utils.logger.debug('init BTClient');
     return _this;
   }
 

@@ -2,7 +2,7 @@ import { Duplex } from 'stream';
 import crypto from 'crypto';
 import BitField from 'bitfield';
 import bencode from 'bencode';
-import { randomID } from './utils';
+import { randomID, logger } from './utils';
 
 const BT_RESERVED = new Buffer([0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x01]);
 const BT_PROTOCOL = new Buffer('BitTorrent protocol');
@@ -30,6 +30,8 @@ export default class Wire extends Duplex {
     this._ut_metadata = null;
 
     this._onHandshake();
+
+    logger.debug('init Wire');
   }
 
   _onMessageLength(buffer) {
