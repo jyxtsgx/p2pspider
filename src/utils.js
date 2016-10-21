@@ -5,7 +5,6 @@ const logger = bunyan.createLogger({ name: 'p2pspider', level: 'debug' });
 
 function randomID() {
   const id = crypto.createHash('sha1').update(crypto.randomBytes(20)).digest();
-  logger.debug('random id', { id });
   return id;
 }
 

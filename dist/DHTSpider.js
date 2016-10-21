@@ -174,12 +174,11 @@ var DHTSpider = function () {
     value: function onMessage(_msg, rinfo) {
       try {
         var msg = _bencode2.default.decode(_msg);
-        _utils.logger.debug('on message', msg, rinfo);
-        if (msg.y === 'r' && msg.r.nodes) {
+        if (msg.y == 'r' && msg.r.nodes) {
           this.onFindNodeResponse(msg.r.nodes);
-        } else if (msg.y === 'q' && msg.q === 'get_peers') {
+        } else if (msg.y == 'q' && msg.q == 'get_peers') {
           this.onGetPeersRequest(msg, rinfo);
-        } else if (msg.y === 'q' && msg.q === 'announce_peer') {
+        } else if (msg.y == 'q' && msg.q == 'announce_peer') {
           this.onAnnouncePeerRequest(msg, rinfo);
         }
       } catch (err) {

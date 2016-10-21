@@ -138,12 +138,11 @@ export default class DHTSpider {
   onMessage(_msg, rinfo) {
     try {
       const msg = bencode.decode(_msg);
-      logger.debug('on message', msg, rinfo);
-      if (msg.y === 'r' && msg.r.nodes) {
+      if (msg.y == 'r' && msg.r.nodes) {
         this.onFindNodeResponse(msg.r.nodes);
-      } else if (msg.y === 'q' && msg.q === 'get_peers') {
+      } else if (msg.y == 'q' && msg.q == 'get_peers') {
         this.onGetPeersRequest(msg, rinfo);
-      } else if (msg.y === 'q' && msg.q === 'announce_peer') {
+      } else if (msg.y == 'q' && msg.q == 'announce_peer') {
         this.onAnnouncePeerRequest(msg, rinfo);
       }
     } catch (err) {

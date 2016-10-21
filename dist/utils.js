@@ -19,7 +19,6 @@ var logger = _bunyan2.default.createLogger({ name: 'p2pspider', level: 'debug' }
 
 function randomID() {
   var id = _crypto2.default.createHash('sha1').update(_crypto2.default.randomBytes(20)).digest();
-  logger.debug('random id', { id: id });
   return id;
 }
 
