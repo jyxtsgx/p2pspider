@@ -15,7 +15,7 @@ var _bunyan2 = _interopRequireDefault(_bunyan);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var logger = _bunyan2.default.createLogger({ name: 'p2pspider', level: 'debug' });
+var logger = _bunyan2.default.createLogger({ name: 'p2pspider', level: 'info' });
 
 function randomID() {
   var id = _crypto2.default.createHash('sha1').update(_crypto2.default.randomBytes(20)).digest();

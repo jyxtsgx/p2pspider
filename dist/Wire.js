@@ -271,6 +271,11 @@ var Wire = function (_Duplex) {
       }
       next(null);
     }
+  }, {
+    key: '_read',
+    value: function _read() {
+      // empty fn
+    }
   }]);
 
   return Wire;

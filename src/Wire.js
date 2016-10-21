@@ -230,4 +230,8 @@ export default class Wire extends Duplex {
     }
     next(null);
   }
+
+  _read() {
+    // empty fn
+  }
 }

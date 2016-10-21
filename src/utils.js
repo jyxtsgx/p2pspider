@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import bunyan from 'bunyan';
 
-const logger = bunyan.createLogger({ name: 'p2pspider', level: 'debug' });
+const logger = bunyan.createLogger({ name: 'p2pspider', level: 'info' });
 
 function randomID() {
   const id = crypto.createHash('sha1').update(crypto.randomBytes(20)).digest();
