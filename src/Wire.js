@@ -199,6 +199,7 @@ export default class Wire extends Duplex {
         metadata = bencode.encode(info);
       }
     } catch (err) {
+      console.log(err);
       this._fail();
       return;
     }

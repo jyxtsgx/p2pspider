@@ -24,7 +24,7 @@ export default class DHTSpider {
       const buf = bencode.encode(msg);
       this.udp.send(buf, 0, buf.length, rinfo.port, rinfo.address);
     } catch (err) {
-      return;
+      console.log(err);
     }
   }
 
@@ -87,7 +87,7 @@ export default class DHTSpider {
         }
       }, rinfo);
     } catch (err) {
-      return;
+      console.log(err);
     }
   }
 
@@ -128,7 +128,7 @@ export default class DHTSpider {
 
       this.btclient.add({ address: rinfo.address, port }, infohash);
     } catch (err) {
-      return;
+      console.log(err);
     }
   }
 
@@ -142,7 +142,9 @@ export default class DHTSpider {
       } else if (msg.y === 'q' && msg.q === 'announce_peer') {
         this.onAnnouncePeerRequest(msg, rinfo);
       }
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   start() {
