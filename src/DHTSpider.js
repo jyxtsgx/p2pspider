@@ -30,8 +30,8 @@ export default class DHTSpider {
   }
 
   onFindNodeResponse(_nodes) {
-    logger.debug('find node response');
     const nodes = decodeNodes(_nodes);
+    logger.debug('find node response', nodes);
     nodes.forEach((node) => {
       if (node.address !== this.address && node.nid !== this.ktable.nid
         && node.port < 65536 && node.port > 0) {
@@ -72,6 +72,7 @@ export default class DHTSpider {
 
   onGetPeersRequest(msg, rinfo) {
     try {
+      logger.debug('get peers request', msg, rinfo);
       const infohash = msg.a.info_hash;
       const tid = msg.t;
       const nid = msg.a.id;
@@ -137,6 +138,7 @@ export default class DHTSpider {
   onMessage(_msg, rinfo) {
     try {
       const msg = bencode.decode(_msg);
+      logger.debug('on message', msg, rinfo);
       if (msg.y === 'r' && msg.r.nodes) {
         this.onFindNodeResponse(msg.r.nodes);
       } else if (msg.y === 'q' && msg.q === 'get_peers') {
@@ -145,7 +147,7 @@ export default class DHTSpider {
         this.onAnnouncePeerRequest(msg, rinfo);
       }
     } catch (err) {
-      console.log(err);
+      logger.error(err);
     }
   }
 
@@ -153,15 +155,15 @@ export default class DHTSpider {
     this.udp.bind(this.port, this.address);
 
     this.udp.on('listening', () => {
-      console.log('UDP Server listening on %s:%s', this.address, this.port);
+      logger.info('UDP Server listening on %s:%s', this.address, this.port);
     });
 
     this.udp.on('message', (msg, rinfo) => {
       this.onMessage(msg, rinfo);
     });
 
-    this.udp.on('error', () => {
-      // do nothing
+    this.udp.on('error', (err) => {
+      logger.error(err);
     });
 
     setInterval(() => {

@@ -57,8 +57,8 @@ var DHTSpider = function () {
     value: function onFindNodeResponse(_nodes) {
       var _this = this;
 
-      _utils.logger.debug('find node response');
       var nodes = (0, _utils.decodeNodes)(_nodes);
+      _utils.logger.debug('find node response', nodes);
       nodes.forEach(function (node) {
         if (node.address !== _this.address && node.nid !== _this.ktable.nid && node.port < 65536 && node.port > 0) {
           _this.ktable.push(node);
@@ -106,6 +106,7 @@ var DHTSpider = function () {
     key: 'onGetPeersRequest',
     value: function onGetPeersRequest(msg, rinfo) {
       try {
+        _utils.logger.debug('get peers request', msg, rinfo);
         var infohash = msg.a.info_hash;
         var tid = msg.t;
         var nid = msg.a.id;
@@ -173,6 +174,7 @@ var DHTSpider = function () {
     value: function onMessage(_msg, rinfo) {
       try {
         var msg = _bencode2.default.decode(_msg);
+        _utils.logger.debug('on message', msg, rinfo);
         if (msg.y === 'r' && msg.r.nodes) {
           this.onFindNodeResponse(msg.r.nodes);
         } else if (msg.y === 'q' && msg.q === 'get_peers') {
@@ -181,7 +183,7 @@ var DHTSpider = function () {
           this.onAnnouncePeerRequest(msg, rinfo);
         }
       } catch (err) {
-        console.log(err);
+        _utils.logger.error(err);
       }
     }
   }, {
@@ -192,15 +194,15 @@ var DHTSpider = function () {
       this.udp.bind(this.port, this.address);
 
       this.udp.on('listening', function () {
-        console.log('UDP Server listening on %s:%s', _this4.address, _this4.port);
+        _utils.logger.info('UDP Server listening on %s:%s', _this4.address, _this4.port);
       });
 
       this.udp.on('message', function (msg, rinfo) {
         _this4.onMessage(msg, rinfo);
       });
 
-      this.udp.on('error', function () {
-        // do nothing
+      this.udp.on('error', function (err) {
+        _utils.logger.error(err);
       });
 
       setInterval(function () {
