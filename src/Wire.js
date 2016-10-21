@@ -1,5 +1,4 @@
 import { Duplex } from 'stream';
-import fs from 'fs';
 import crypto from 'crypto';
 import BitField from 'bitfield';
 import bencode from 'bencode';
@@ -195,28 +194,22 @@ export default class Wire extends Duplex {
   }
 
   _onDone(_metadata) {
-    let metadata = _metadata;
-    try {
-      const info = bencode.decode(metadata).info;
-      if (info) {
-        metadata = bencode.encode(info);
-      }
-    } catch (err) {
-      console.log(err);
-      this._fail();
-      return;
+    let metadata = bencode.decode(_metadata);
+    if (!metadata.info) {
+      metadata = { info: metadata };
     }
-    const infohash = crypto.createHash('sha1').update(metadata).digest('hex');
-    fs.writeFile(`/tmp/${metadata.infohash}.torrent`, _metadata, (err) => {
-      if (err) {
-        console.log(err);
-      }
-    });
+    let tmp;
+    if (!metadata.info) {
+      tmp = _metadata;
+    } else {
+      tmp = bencode.encode(metadata.info);
+    }
+    const infohash = crypto.createHash('sha1').update(tmp).digest('hex');
     if (this._infohash.toString('hex') !== infohash) {
       this._fail();
       return false;
     }
-    this.emit('metadata', { info: bencode.decode(metadata) }, this._infohash);
+    this.emit('metadata', metadata, this._infohash);
   }
 
   _fail() {

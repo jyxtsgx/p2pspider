@@ -10,10 +10,6 @@ var _get = function get(object, property, receiver) { if (object === null) objec
 
 var _stream = require('stream');
 
-var _fs = require('fs');
-
-var _fs2 = _interopRequireDefault(_fs);
-
 var _crypto = require('crypto');
 
 var _crypto2 = _interopRequireDefault(_crypto);
@@ -239,28 +235,22 @@ var Wire = function (_Duplex) {
   }, {
     key: '_onDone',
     value: function _onDone(_metadata) {
-      var metadata = _metadata;
-      try {
-        var info = _bencode2.default.decode(metadata).info;
-        if (info) {
-          metadata = _bencode2.default.encode(info);
-        }
-      } catch (err) {
-        console.log(err);
-        this._fail();
-        return;
+      var metadata = _bencode2.default.decode(_metadata);
+      if (!metadata.info) {
+        metadata = { info: metadata };
       }
-      var infohash = _crypto2.default.createHash('sha1').update(metadata).digest('hex');
-      _fs2.default.writeFile('/tmp/' + metadata.infohash + '.torrent', _metadata, function (err) {
-        if (err) {
-          console.log(err);
-        }
-      });
+      var tmp = void 0;
+      if (!metadata.info) {
+        tmp = _metadata;
+      } else {
+        tmp = _bencode2.default.encode(metadata.info);
+      }
+      var infohash = _crypto2.default.createHash('sha1').update(tmp).digest('hex');
       if (this._infohash.toString('hex') !== infohash) {
         this._fail();
         return false;
       }
-      this.emit('metadata', { info: _bencode2.default.decode(metadata) }, this._infohash);
+      this.emit('metadata', metadata, this._infohash);
     }
   }, {
     key: '_fail',
