@@ -21,6 +21,7 @@ module.exports = {
     "no-underscore-dangle": 0,
     "no-empty": 0,
     "no-console": 0,
-    "no-bitwise": 0
+    "no-bitwise": 0,
+    "class-methods-use-this": 0
   }
 }

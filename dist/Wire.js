@@ -240,6 +240,7 @@ var Wire = function (_Duplex) {
           metadata = _bencode2.default.encode(info);
         }
       } catch (err) {
+        console.log(err);
         this._fail();
         return;
       }

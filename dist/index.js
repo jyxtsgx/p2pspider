@@ -38,18 +38,12 @@ var P2PSpider = function (_EventEmitter) {
 
     var _this = _possibleConstructorReturn(this, (P2PSpider.__proto__ || Object.getPrototypeOf(P2PSpider)).call(this));
 
-    _this._ignore = undefined;
-    _this.btclient = new _BTClient2.default(timeout, _this._ignore, maxConnections);
+    _this.btclient = new _BTClient2.default(timeout, maxConnections);
     _this.spider = new _DHTSpider2.default(_this.btclient, address, port, nodesMaxSize);
     return _this;
   }
 
   _createClass(P2PSpider, [{
-    key: 'ignore',
-    value: function ignore(_ignore) {
-      this._ignore = _ignore;
-    }
-  }, {
     key: 'listen',
     value: function listen() {
       var _this2 = this;

@@ -52,7 +52,7 @@ var DHTSpider = function () {
         var buf = _bencode2.default.encode(msg);
         this.udp.send(buf, 0, buf.length, rinfo.port, rinfo.address);
       } catch (err) {
-        return;
+        console.log(err);
       }
     }
   }, {
@@ -125,7 +125,7 @@ var DHTSpider = function () {
           }
         }, rinfo);
       } catch (err) {
-        return;
+        console.log(err);
       }
     }
   }, {
@@ -166,7 +166,7 @@ var DHTSpider = function () {
 
         this.btclient.add({ address: rinfo.address, port: port }, infohash);
       } catch (err) {
-        return;
+        console.log(err);
       }
     }
   }, {
@@ -181,7 +181,9 @@ var DHTSpider = function () {
         } else if (msg.y === 'q' && msg.q === 'announce_peer') {
           this.onAnnouncePeerRequest(msg, rinfo);
         }
-      } catch (err) {}
+      } catch (err) {
+        console.log(err);
+      }
     }
   }, {
     key: 'start',

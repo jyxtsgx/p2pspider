@@ -4,20 +4,19 @@ import PeerQueue from './PeerQueue';
 import Wire from './Wire';
 
 export default class BTClient extends EventEmitter {
-  constructor(timeout, maxConnections, ignore) {
+  constructor(timeout, maxConnections) {
     super();
     this.timeout = timeout;
     this.maxConnections = maxConnections;
     this.activeConnections = 0;
     this.peers = new PeerQueue(this.maxConnections);
     this.on('download', this._download);
-    if (typeof ignore === 'function') {
-      this.ignore = ignore;
-    } else {
-      this.ignore = function ignore(infohash, rinfo, ignore) {
-        ignore(false);
-      };
-    }
+  }
+
+  ignore(infohash, rinfo, callback) {
+    // false => always to download the metadata even though the metadata is exists.
+    const theInfohashIsExistsInDatabase = false;
+    callback(theInfohashIsExistsInDatabase);
   }
 
   _next(infohash, successful) {

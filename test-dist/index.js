@@ -8,12 +8,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var p2p = new _dist2.default();
 
-p2p.ignore(function (infohash, rinfo, callback) {
-  // false => always to download the metadata even though the metadata is exists.
-  var theInfohashIsExistsInDatabase = false;
-  callback(theInfohashIsExistsInDatabase);
-});
-
 p2p.on('metadata', function (metadata) {
   console.log(metadata);
   var files = metadata.info.files || [];

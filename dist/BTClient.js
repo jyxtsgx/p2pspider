@@ -31,27 +31,27 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var BTClient = function (_EventEmitter) {
   _inherits(BTClient, _EventEmitter);
 
-  function BTClient(timeout, maxConnections, ignore) {
+  function BTClient(timeout, maxConnections) {
     _classCallCheck(this, BTClient);
 
     var _this = _possibleConstructorReturn(this, (BTClient.__proto__ || Object.getPrototypeOf(BTClient)).call(this));
 
     _this.timeout = timeout;
-    _this.maxConnections = maxConnections || 200;
+    _this.maxConnections = maxConnections;
     _this.activeConnections = 0;
     _this.peers = new _PeerQueue2.default(_this.maxConnections);
     _this.on('download', _this._download);
-    if (typeof ignore === 'function') {
-      _this.ignore = ignore;
-    } else {
-      _this.ignore = function ignore(infohash, rinfo, ignore) {
-        ignore(false);
-      };
-    }
     return _this;
   }
 
   _createClass(BTClient, [{
+    key: 'ignore',
+    value: function ignore(infohash, rinfo, callback) {
+      // false => always to download the metadata even though the metadata is exists.
+      var theInfohashIsExistsInDatabase = false;
+      callback(theInfohashIsExistsInDatabase);
+    }
+  }, {
     key: '_next',
     value: function _next(infohash, successful) {
       var _this2 = this;
