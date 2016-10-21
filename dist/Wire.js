@@ -236,7 +236,6 @@ var Wire = function (_Duplex) {
     key: '_onDone',
     value: function _onDone(_metadata) {
       var metadata = _metadata;
-      console.log(_bencode2.default.decode(metadata));
       try {
         var info = _bencode2.default.decode(metadata).info;
         if (info) {

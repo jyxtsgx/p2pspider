@@ -1,12 +1,16 @@
+import fs from 'fs';
+import bencode from 'bencode';
+
 import P2PSpider from '../dist';
 
 const p2p = new P2PSpider();
 
 p2p.on('metadata', (metadata) => {
   console.log(metadata);
-  const files = metadata.info.files || [];
-  files.forEach((file) => {
-    console.log(file.path.toString('utf8'));
+  fs.write(`/tmp/${metadata.infohash}.torrent`, bencode.encode(metadata.info), (err) => {
+    if (err) {
+      console.log(err);
+    }
   });
 });
 

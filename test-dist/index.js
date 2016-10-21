@@ -1,5 +1,13 @@
 'use strict';
 
+var _fs = require('fs');
+
+var _fs2 = _interopRequireDefault(_fs);
+
+var _bencode = require('bencode');
+
+var _bencode2 = _interopRequireDefault(_bencode);
+
 var _dist = require('../dist');
 
 var _dist2 = _interopRequireDefault(_dist);
@@ -10,9 +18,10 @@ var p2p = new _dist2.default();
 
 p2p.on('metadata', function (metadata) {
   console.log(metadata);
-  var files = metadata.info.files || [];
-  files.forEach(function (file) {
-    console.log(file.path.toString('utf8'));
+  _fs2.default.write('/tmp/' + metadata.infohash + '.torrent', _bencode2.default.encode(metadata.info), function (err) {
+    if (err) {
+      console.log(err);
+    }
   });
 });
 

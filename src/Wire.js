@@ -195,7 +195,6 @@ export default class Wire extends Duplex {
 
   _onDone(_metadata) {
     let metadata = _metadata;
-    console.log(bencode.decode(metadata));
     try {
       const info = bencode.decode(metadata).info;
       if (info) {
