@@ -2,6 +2,8 @@
 
 本项目是在[原p2pspider](https://github.com/dontcontactme/p2pspider)的基础上修改而来，整理一下原项目的代码，添加了babel，eslint，gulp等工具来支持es6代码。
 
+demo程序：[bt问问](https://btwenwen.com/)
+
 新项目源码放在src，babel转译后的文件放在dist目录，源码统一改成es6 class格式，
 
 ## 本地测试
